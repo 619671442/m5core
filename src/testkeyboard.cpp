@@ -21,7 +21,7 @@ void testkeyboard()
     lv_textarea_set_password_mode(pwd_ta, true);      // 密码输入模式
     lv_textarea_set_one_line(pwd_ta, true);           // 一行输入模式
     lv_obj_set_width(pwd_ta, lv_pct(40));             // 设置宽度
-    lv_obj_set_pos(pwd_ta, 5, 20);
+    lv_obj_set_pos(pwd_ta, 10, 30);
     lv_obj_add_state(pwd_ta, LV_STATE_DEFAULT);                       // 设置位置
     lv_obj_add_event_cb(pwd_ta, textarea_event_cb, LV_EVENT_ALL, kb); // 创建回调函数
     lv_obj_set_style_text_font(pwd_ta, &font_songti, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -35,7 +35,7 @@ void testkeyboard()
     lv_textarea_set_one_line(text_ta, true);              // 创建输入对话框
     lv_textarea_set_password_mode(text_ta, false);        // 非密码输入模式
     lv_obj_set_width(text_ta, lv_pct(40));                // 设置尺寸
-    lv_obj_align(text_ta, LV_ALIGN_TOP_RIGHT, -5, 20);    // 设置位置
+    lv_obj_align(text_ta, LV_ALIGN_TOP_RIGHT, -10, 30);    // 设置位置
 
     lv_obj_t *text_label = lv_label_create(lv_scr_act());              // 创建label
     lv_label_set_text(text_label, "text");                             // 设置label内容
@@ -58,8 +58,9 @@ static void textarea_event_cb(lv_event_t *e)
             lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN); // 清除键盘的隐身标志，显示键盘
             
             lv_keyboard_set_textarea(kb, ta);
-            //lv_group_set_editing(lv_group_get_default(), true);            
-            //lv_obj_add_event_cb(kb, keyboard_event_cb, LV_EVENT_ALL, ta); // 创建回调函数
+            lv_group_focus_obj(kb);
+            lv_group_set_editing(lv_group_get_default(), true);            
+            lv_obj_add_event_cb(kb, keyboard_event_cb, LV_EVENT_ALL, ta); // 创建回调函数
 
         }
         break;
@@ -76,8 +77,8 @@ static void textarea_event_cb(lv_event_t *e)
         break;
     case LV_EVENT_DEFOCUSED: // 获取焦点事件
         Serial.println("textarea失去焦点");
-        lv_keyboard_set_textarea(kb, NULL);      // 取消键盘的关联
-        lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN); // 添加键盘隐藏标志，隐藏键盘
+        //lv_keyboard_set_textarea(kb, NULL);      // 取消键盘的关联
+        //lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN); // 添加键盘隐藏标志，隐藏键盘
 
         break;
 
@@ -86,9 +87,23 @@ static void textarea_event_cb(lv_event_t *e)
     }
 }
 
-// static void keyboard_event_cb(lv_event_t *e)
-// {
-//     lv_obj_t *kb = lv_event_get_target(e);       // 获取当前事件对象，也就是键盘对象
-//     lv_event_code_t code = lv_event_get_code(e); // 创建输入事件对象
-//     lv_obj_t *ta = lv_keyboard_get_textarea(kb); // 获取与键盘绑定的输入缓冲区的对象
-// }
+static void keyboard_event_cb(lv_event_t *e)
+{
+    lv_obj_t *kb = lv_event_get_target(e);       // 获取当前事件对象，也就是键盘对象
+    lv_event_code_t code = lv_event_get_code(e); // 创建输入事件对象
+    lv_obj_t *ta = lv_keyboard_get_textarea(kb); // 获取与键盘绑定的输入缓冲区的对象
+
+    switch(code) {
+    case LV_EVENT_READY :
+        lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN); // 清除键盘的隐身标志，显示键盘          
+        lv_keyboard_set_textarea(kb, NULL);
+        lv_group_focus_obj(ta);
+        lv_group_set_editing(lv_group_get_default(), false);            
+        lv_obj_remove_event_cb(kb, keyboard_event_cb); // 删除回调函数
+        break;
+    case LV_EVENT_CANCEL :
+        break;
+    default:
+        break;
+    }
+}
