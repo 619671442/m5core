@@ -10,8 +10,11 @@ static const uint16_t screenHeight = 240;
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[screenWidth * screenHeight / 10];
 
+
 /* TFT instance */
 TFT_eSPI tft = TFT_eSPI(screenWidth, screenHeight);
+
+
 
 /* ui刷新 */
 void my_disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p)
@@ -57,18 +60,22 @@ void setup()
     lv_disp_drv_register(&disp_drv);
 
     // 初始化keypad,不用button模式,因为button需要指定按钮坐标
-    keypad_init();
-    static lv_indev_drv_t indev_drv;
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_KEYPAD; // 指定输入类型是按键
-    indev_drv.read_cb = keypad_read;
-    lv_indev_t *lv_button_device_obj = lv_indev_drv_register(&indev_drv);
+    lv_port_indev_init();
+    // keypad_init();
+    // static lv_indev_drv_t indev_drv;
+    // lv_indev_drv_init(&indev_drv);
+    // indev_drv.type = LV_INDEV_TYPE_KEYPAD; // 指定输入类型是按键
+    // indev_drv.read_cb = keypad_read;
+    // lv_indev_t *lv_button_device_obj = lv_indev_drv_register(&indev_drv);
 
+    lv_indev_t *indev_keypad = get_indev();
+    lv_group_t *group_default = get_group_default();
     Serial.println("Setup done");
+
     // 二维码
-    // testqc(lv_button_device_obj);
+    //testqc(indev_keypad);
     // 虚拟键盘
-    testkeyboard(lv_button_device_obj);
+    testkeyboard();
 }
 
 void loop()

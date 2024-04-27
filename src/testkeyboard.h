@@ -4,6 +4,6 @@
 #include "lvgl.h"
 #include <Arduino.h>
 
-void testkeyboard(lv_indev_t *lv_button_device_obj);
+void testkeyboard();
 
 #endif

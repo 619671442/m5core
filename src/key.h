@@ -7,10 +7,8 @@
 
 
 
-void keypad_init(void);
-void keypad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data);
-uint32_t keypad_get_key(void);
-
-
+void lv_port_indev_init(void);
+lv_indev_t * get_indev(void);
+lv_group_t *get_group_default(void);
 
 #endif 
