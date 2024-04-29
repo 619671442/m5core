@@ -36,6 +36,7 @@ void testkeyboard()
     lv_textarea_set_password_mode(text_ta, false);        // 非密码输入模式
     lv_obj_set_width(text_ta, lv_pct(40));                // 设置尺寸
     lv_obj_align(text_ta, LV_ALIGN_TOP_RIGHT, -10, 30);    // 设置位置
+    lv_obj_add_event_cb(text_ta, textarea_event_cb, LV_EVENT_ALL, kb); // 创建回调函数
 
     lv_obj_t *text_label = lv_label_create(lv_scr_act());              // 创建label
     lv_label_set_text(text_label, "text");                             // 设置label内容

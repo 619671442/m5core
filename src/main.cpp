@@ -3,6 +3,7 @@
 #include "key.h"
 #include "testqc.h"
 #include "testkeyboard.h"
+#include "sdcard.h"
 
 static const uint16_t screenWidth = 320;
 static const uint16_t screenHeight = 240;
@@ -72,10 +73,14 @@ void setup()
     lv_group_t *group_default = get_group_default();
     Serial.println("Setup done");
 
-    // 二维码
-    //testqc(indev_keypad);
     // 虚拟键盘
     testkeyboard();
+    test_sdcard();
+
+    // 二维码
+    //testqc(indev_keypad);
+    
+    
 }
 
 void loop()
